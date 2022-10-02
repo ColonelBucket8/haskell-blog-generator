@@ -1,15 +1,30 @@
+main :: IO ()
 main = putStrLn myhtml
 
-myhtml = makeHtml "This is a test" "Hello world"
+myhtml :: String
+myhtml = makeHtml "This is a test" $ h1_ "Hello world!" <> p_ "This is hello from another world"
 
-wrapHtml content = "<html><body>" <> content <> "</body></html>"
+html_ :: String -> String
+html_ = el "html"
 
-html_ content = "<html>" <> content <> "</html>"
+body_ :: String -> String
+body_ = el "body"
 
-body_ content = "<body>" <> content <> "</body>"
+head_ :: String -> String
+head_ = el "head"
 
-head_ content = "<head>" <> content <> "</head>"
+title_ :: String -> String
+title_ = el "title"
 
-title_ content = "<title>" <> content <> "</title>"
+p_ :: String -> String
+p_ = el "p"
 
+h1_ :: String -> String
+h1_ = el "h1"
+
+el :: String -> String -> String
+el tag content = "<" <> ">" <> content <> "</" <> tag <> ">"
+
+makeHtml :: String -> String -> String
 makeHtml title content = html_ (head_ (title_ title) <> body_ content)
+
