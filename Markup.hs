@@ -5,6 +5,8 @@ module Markup
 where
 
 import Numeric.Natural
+import Data.Maybe
+import Data.Word
 
 type Document = [Structure]
 
@@ -151,3 +153,14 @@ ansiToUbuntu ansiColor =
             White -> RGB 233 235 235
         
 
+isEmpty :: [a] -> Bool
+isEmpty list = 
+  case listToMaybe list of
+    Nothing -> False
+    Just _ -> True
+
+isEmpty' :: [a] -> Bool
+isEmpty' list =
+  case list of
+    [] -> True
+    _ : _ -> False
