@@ -71,3 +71,83 @@ parseLines currentParagraph texts =
 trim :: String -> String
 trim = unwords . words
 
+safeHead :: [a] -> Maybe a
+safeHead list =
+  case list of
+    [] -> Nothing
+    x : _ -> Just x
+
+exactlyTwo :: [a] -> Maybe (a, a)
+exactlyTwo list =
+  case list of
+    [x, y] -> Just (x , y)
+    _ -> Nothing
+
+data Color
+  = RGB Word8 Word8 Word8
+
+data Brightness
+  = Dark
+  | Bright
+
+data EightColor
+  = Black
+  | Red
+  | Green
+  | Yellow
+  | Blue 
+  | Magenta
+  | Cyan
+  | White
+
+data AnsiColor
+  = AnsiColor Brightness EightColor
+
+getBluePart :: Color -> Word8
+getBluePart color =
+  case color of
+    RGB _ _ blue -> blue
+
+
+ansiColorToVGA :: AnsiColor -> Color
+ansiColorToVGA ansicolor =
+  case ansicolor of
+    AnsiColor Dark Black -> RGB 0 0 0
+    AnsiColor Bright Black -> RGB 85 85 85
+    AnsiColor Dark Red -> RGB 170 0 0
+    AnsiColor Bright Red -> RGB 255 85 85
+
+isBright :: AnsiColor -> Bool
+isBright ansicolor =
+  case ansicolor of
+    AnsiColor Bright _ -> True
+    AnsiColor _ _ -> False
+    
+ansiToUbuntu :: AnsiColor -> Color
+ansiToUbuntu ansiColor =
+  case ansiColor of 
+    AnsiColor brightness color ->
+      case brightness of
+        Dark -> 
+          case color of
+            Black -> RGB 0 0 0
+            Red -> RGB 194 54 33
+            Green -> RGB 37 188 36
+            Yellow -> RGB 173 173 39
+            Blue -> RGB 73 46 225
+            Magenta -> RGB 211 56 211
+            Cyan -> RGB 51 187 200
+            White -> RGB 203 204 205
+
+        Bright ->
+          case color of
+            Black -> RGB 129 131 131
+            Red -> RGB 252 57 31
+            Green -> RGB 49 231 34
+            Yellow -> RGB 234 236 35
+            Blue -> RGB 88 51 255
+            Magenta -> RGB 249 53 248
+            Cyan -> RGB 20 240 240
+            White -> RGB 233 235 235
+        
+
