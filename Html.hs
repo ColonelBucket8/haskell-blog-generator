@@ -8,9 +8,8 @@ module Html
   , h1_
   , ul_
   , ol_
-  , append_
   , render
   )
   where 
   
-  import Html.Internal
+import Html.Internal

@@ -6,6 +6,10 @@ newtype Structure = Structure String
 
 type Title = String
 
+instance Semigroup Structure where
+  (<>) c1 c2 =
+    Structure (getStructureString c1 <> getStructureString c2)
+
 html_ :: Title -> Structure -> Html
 html_ title content =
   Html 
@@ -32,10 +36,6 @@ ol_ = Structure . el "ol" . concat . map (el "li" . getStructureString)
 
 el :: String -> String -> String
 el tag content = "<" <> tag <> ">" <> content <> "</" <> tag <> ">"
-
-append_ :: Structure -> Structure -> Structure
-append_ (Structure a) (Structure b) = 
-  Structure (a <> b)
 
 render :: Html -> String
 render html = 
