@@ -1,30 +1,54 @@
 main :: IO ()
-main = putStrLn myhtml
+main = putStrLn $ render myhtml
 
-myhtml :: String
-myhtml = makeHtml "This is a test" $ h1_ "Hello world!" <> p_ "This is hello from another world"
+myhtml :: Html
+myhtml = 
+  html_ 
+    "My Title" 
+    ( append_ 
+      (h1_ "Heading")
+      ( append_ 
+        (p_ "Paragraph #1")
+        (p_ "Paragraph #2")
+      )
+    )
 
-html_ :: String -> String
-html_ = el "html"
 
-body_ :: String -> String
-body_ = el "body"
+newtype Html = Html String
 
-head_ :: String -> String
-head_ = el "head"
+newtype Structure = Structure String
 
-title_ :: String -> String
-title_ = el "title"
+type Title = String
 
-p_ :: String -> String
-p_ = el "p"
+html_ :: Title -> Structure -> Html
+html_ title content =
+  Html 
+    ( el "html"
+      ( el "head" (el "title" title)
+        <> el "body" (getStructureString content)
+      ) 
+    )
 
-h1_ :: String -> String
-h1_ = el "h1"
+p_ :: String -> Structure
+p_ = Structure . el "p"
+
+h1_ :: String -> Structure
+h1_ = Structure . el "h1"
 
 el :: String -> String -> String
-el tag content = "<" <> ">" <> content <> "</" <> tag <> ">"
+el tag content = "<" <> tag <> ">" <> content <> "</" <> tag <> ">"
 
-makeHtml :: String -> String -> String
-makeHtml title content = html_ (head_ (title_ title) <> body_ content)
 
+append_ :: Structure -> Structure -> Structure
+append_ (Structure a) (Structure b) = 
+  Structure (a <> b)
+
+render :: Html -> String
+render html = 
+  case html of
+    Html str -> str
+
+getStructureString :: Structure -> String
+getStructureString struct =
+  case struct of 
+    Structure str -> str
