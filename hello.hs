@@ -1,4 +1,5 @@
 import Html
+import Markup
 
 main :: IO ()
 main = putStrLn $ render myhtml
