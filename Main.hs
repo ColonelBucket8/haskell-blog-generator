@@ -9,7 +9,20 @@ import System.Environment (getArgs)
 
 main :: IO ()
 main = do
-  print $ "Hello world"
+  args <- getArgs
+  case args of
+    [] -> do
+      contents <- getContents
+      putStrLn $ process "Empty Title" contents
+    [input, output] -> do
+      content <- readFile output
+      exists <- doesFileExist output
+      let writeResult = writeFile output (process input  content)
+      if exists
+        then whenIO confirm writeResult
+        else writeResult
+    _ ->
+      putStrLn "Usage: runghc Main.hs [-- <input-file> <output-file>]"
 
 myhtml :: Html.Html
 myhtml = Html.html_ "My Title" (Html.h_ 1 "heading" <> (Html.p_ "Paragraph #1" <> Html.p_ "Paragraph #2"))
