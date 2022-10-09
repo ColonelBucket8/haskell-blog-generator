@@ -1,6 +1,6 @@
 module Markup 
   ( Document
-  , Structure
+  , Structure (Heading, Paragraph, UnorderedList, OrderedList, CodeBlock)
   , parse
   , ex1
   , ex2
